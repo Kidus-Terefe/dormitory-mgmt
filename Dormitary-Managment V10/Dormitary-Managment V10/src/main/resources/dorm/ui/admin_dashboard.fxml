@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="dorm.ui.controller.AdminController"
+            stylesheets="@styles.css">
+
+    <!-- Header -->
+    <top>
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="20">
+            <Label fx:id="welcomeLabel" text="Admin Dashboard"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Refresh" onAction="#onRefresh"/>
+            <Button text="Logout" onAction="#onLogout" styleClass="button-secondary"/>
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            
+            <!-- Applications Tab -->
+            <Tab text="Applications">
+                <VBox spacing="10" styleClass="form-container">
+                    
+                    <!-- Filters -->
+                    <VBox styleClass="filter-panel" spacing="10">
+                        <Label text="Filters" styleClass="header-label"/>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Gender:"/>
+                            <ComboBox fx:id="filterGender" prefWidth="100"/>
+                            
+                            <Label text="Residency:"/>
+                            <ComboBox fx:id="filterResidency" prefWidth="120"/>
+                            
+                            <Label text="Subcity:"/>
+                            <ComboBox fx:id="filterSubcity" prefWidth="120" editable="true"/>
+                            
+                            <Label text="Woreda:"/>
+                            <ComboBox fx:id="filterWoreda" prefWidth="100" editable="true"/>
+                            
+                            <Label text="College:"/>
+                            <ComboBox fx:id="filterCollege" prefWidth="80"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Sponsorship:"/>
+                            <ComboBox fx:id="filterSponsorship" prefWidth="140"/>
+                            
+                            <Label text="Status:"/>
+                            <ComboBox fx:id="filterStatus" prefWidth="160"/>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="Apply Filter" onAction="#onApplyFilter"/>
+                            <Button text="Clear" onAction="#onClearFilter" styleClass="button-secondary"/>
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Applications Table -->
+                    <TableView fx:id="applicationTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="selectColumn" text="Select" minWidth="50" maxWidth="60"/>
+                            <TableColumn fx:id="nameColumn" text="Name" minWidth="100"/>
+                            <TableColumn fx:id="studentIdColumn" text="Student ID" minWidth="100"/>
+                            <TableColumn fx:id="genderColumn" text="Gender" minWidth="60"/>
+                            <TableColumn fx:id="collegeColumn" text="College" minWidth="60"/>
+                            <TableColumn fx:id="residencyColumn" text="Residency" minWidth="90"/>
+                            <TableColumn fx:id="subcityColumn" text="Subcity" minWidth="100"/>
+                            <TableColumn fx:id="woredaColumn" text="Woreda" minWidth="60"/>
+                            <TableColumn fx:id="sponsorshipColumn" text="Sponsorship" minWidth="100"/>
+                            <TableColumn fx:id="transactionIdColumn" text="Transaction ID" minWidth="100"/>
+                            <TableColumn fx:id="statusColumn" text="Status" minWidth="120"/>
+                            <TableColumn fx:id="buildingColumn" text="Building" minWidth="80"/>
+                        </columns>
+                    </TableView>
+                    
+                    <!-- Actions -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="selectAllCheckbox" text="Select All" onAction="#onSelectAll"/>
+                        <Separator orientation="VERTICAL"/>
+                        <Button text="Approve" onAction="#onApprove" styleClass="button-success"/>
+                        <Button text="Decline" onAction="#onDecline" styleClass="button-danger"/>
+                        <Button text="Request Resubmit" onAction="#onResubmit" styleClass="button-warning"/>
+                        <Separator orientation="VERTICAL"/>
+                        <TextField fx:id="buildingField" promptText="Building" prefWidth="100"/>
+                        <Button text="Assign" onAction="#onAssign"/>
+                        <Separator orientation="VERTICAL"/>
+                        <Button text="Export CSV" onAction="#onExport" styleClass="button-secondary"/>
+                    </HBox>
+                    
+                </VBox>
+            </Tab>
+            
+            <!-- Announcements Tab -->
+            <Tab text="Announcements">
+                <VBox spacing="15" styleClass="form-container">
+                    
+                    <!-- Announcement List -->
+                    <Label text="Announcements" styleClass="subtitle-label"/>
+                    <ListView fx:id="announcementList" VBox.vgrow="ALWAYS" prefHeight="300"/>
+                    
+                    <Separator/>
+                    
+                    <!-- Create/Edit Announcement -->
+                    <VBox styleClass="card" spacing="10">
+                        <Label fx:id="announcementFormLabel" text="Create Announcement" styleClass="header-label"/>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Title:" styleClass="form-label" minWidth="60"/>
+                            <TextField fx:id="announcementTitleField" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <VBox spacing="5">
+                            <Label text="Content:" styleClass="form-label"/>
+                            <TextArea fx:id="announcementBodyArea" prefRowCount="4" wrapText="true"/>
+                        </VBox>
+                        
+                        <HBox spacing="10">
+                            <Button fx:id="postAnnouncementBtn" text="Post" onAction="#onPostAnnouncement" styleClass="button-success"/>
+                            <Button text="Edit Selected" onAction="#onEditAnnouncement"/>
+                            <Button text="Delete Selected" onAction="#onDeleteAnnouncement" styleClass="button-danger"/>
+                            <Button fx:id="cancelEditBtn" text="Cancel" onAction="#onCancelEdit" styleClass="button-secondary" visible="false"/>
+                        </HBox>
+                    </VBox>
+                    
+                </VBox>
+            </Tab>
+            
+            <!-- Messages Tab -->
+            <Tab text="Messages">
+                <VBox spacing="15" styleClass="form-container">
+                    
+                    <!-- Messages Table -->
+                    <Label text="Received Messages" styleClass="subtitle-label"/>
+                    <Label text="Double-click a message to reply" styleClass="info-label"/>
+                    <TableView fx:id="messageTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="msgReadColumn" text="Read" prefWidth="50"/>
+                            <TableColumn fx:id="msgFromColumn" text="From" prefWidth="200"/>
+                            <TableColumn fx:id="msgContentColumn" text="Message" prefWidth="350"/>
+                            <TableColumn fx:id="msgDateColumn" text="Date" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                    
+                    <Separator/>
+                    
+                    <!-- Reply Form -->
+                    <VBox styleClass="card" spacing="10">
+                        <Label text="Reply to Student" styleClass="header-label"/>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Student ID:" styleClass="form-label" minWidth="80"/>
+                            <TextField fx:id="replyStudentIdField" prefWidth="150"/>
+                            <Label fx:id="replyStudentNameLabel" styleClass="info-label"/>
+                        </HBox>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="replyMessageField" promptText="Type your reply (max 80 chars)" HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="replyCharCountLabel" text="0/80" styleClass="info-label"/>
+                            <Button text="Send" onAction="#onSendReply"/>
+                        </HBox>
+                    </VBox>
+                    
+                </VBox>
+            </Tab>
+            
+            <!-- Search Tab -->
+            <Tab text="Search Student">
+                <VBox spacing="20" styleClass="form-container">
+                    
+                    <!-- Search Box -->
+                    <HBox styleClass="card" spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Student ID:" styleClass="form-label"/>
+                        <TextField fx:id="searchStudentIdField" promptText="Enter student ID" prefWidth="200"/>
+                        <Button text="Search" onAction="#onSearch"/>
+                    </HBox>
+                    
+                    <!-- Student Details -->
+                    <VBox fx:id="searchResultPane" styleClass="card" spacing="15" visible="false">
+                        <Label text="Student Details" styleClass="subtitle-label"/>
+                        <Separator/>
+                        
+                        <GridPane hgap="15" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="120"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+                            
+                            <Label text="Name:" styleClass="form-label" GridPane.rowIndex="0"/>
+                            <TextField fx:id="searchNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            
+                            <Label text="Gender:" styleClass="form-label" GridPane.rowIndex="1"/>
+                            <ComboBox fx:id="searchGenderBox" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            
+                            <Label text="College:" styleClass="form-label" GridPane.rowIndex="2"/>
+                            <Label fx:id="searchCollegeLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            
+                            <Label text="Residency:" styleClass="form-label" GridPane.rowIndex="3"/>
+                            <ComboBox fx:id="searchResidencyBox" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            
+                            <Label text="City:" styleClass="form-label" GridPane.rowIndex="4"/>
+                            <TextField fx:id="searchCityField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                            
+                            <Label text="Subcity:" styleClass="form-label" GridPane.rowIndex="5"/>
+                            <TextField fx:id="searchSubcityField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                            
+                            <Label text="Woreda:" styleClass="form-label" GridPane.rowIndex="6"/>
+                            <TextField fx:id="searchWoredaField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                            
+                            <Label text="Building:" styleClass="form-label" GridPane.rowIndex="7"/>
+                            <TextField fx:id="searchBuildingField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                            
+                            <Label text="Status:" styleClass="form-label" GridPane.rowIndex="8"/>
+                            <Label fx:id="searchStatusLabel" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                        </GridPane>
+                        
+                        <HBox spacing="10">
+                            <Button text="Save Changes" onAction="#onSaveStudent" styleClass="button-success"/>
+                        </HBox>
+                    </VBox>
+                    
+                </VBox>
+            </Tab>
+            
+        </TabPane>
+    </center>
+
+</BorderPane>
